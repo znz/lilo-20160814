@@ -1,0 +1,63 @@
+= lilo.linux.or.jp の話
+
+# : subtitle
+#    サブタイトル
+: author
+   Kazuhiro NISHIYAMA
+# : institution
+#    所属
+: content-source
+   LILO&東海道らぐオフラインミーティング
+: date
+   2016-08-14
+# : allotted-time
+#    5m
+# : theme
+#    default
+
+= lilo.linux.or.jp とは?
+
+主な用途:
+
+  * LILO の Web サーバー (apache)
+  * ML サーバー (mailman)
+
+= 環境
+
+  * さくらの VPS
+  * Debian GNU/Linux
+
+= 二要素認証導入
+
+  * 進展なし
+  * 他の人が設定していないようなので二要素認証なしでもログインできるまま
+
+= letsencrypt
+
+  * EFF のクライアントが letsencrypt パッケージから certbot パッケージに変わった
+  * Let's Encrypt Subscriber Agreement が v1.0.1 から v1.1.1 に更新された (8/1から)
+
+= certbot (1/2)
+
+  * パッケージの入れ替えが発生
+    * sudo aptitude -t jessie-backports install certbot
+  * その後でも明示的にインストール操作が必要な更新があった
+    * sudo aptitude install -t jessie-backports python-cryptography
+
+= certbot (2/2)
+
+  * 不要になった letsencrypt パッケージを purge すると /etc/letsencrypt が消えるので remove 状態で放置中
+    * (自分の別サーバーでは消えてしまったが etckeeper で管理していたので復旧できた)
+
+= letsencrypt 自動更新
+
+  * certbot パッケージの /etc/cron.d/certbot
+    * コメントアウト
+  * 自作の更新処理を引き続き使用
+    * 更新時にメールが飛ぶため
+    * apache2 などの reload のため
+
+= letsencrypt 自動更新状況
+
+  * 2016年6月27日月曜日 5時25分00秒 日本標準時からの証明書に自動更新できていた
+  * 他サーバーでの状況を見ると Let's Encrypt Subscriber Agreement 更新は何もしなくても証明書の更新には影響がなさそうだった
